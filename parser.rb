@@ -14,7 +14,10 @@ class Parser
 
   #Needs to sort data to check the multiple job dependency
   def parse_input(params)
+    puts "============ Job will execute with following order ================="
     puts Parser.sort_jobs!(Parser.parse_params(params))
+    puts "============ ************************************* ================="
+     Parser.sort_jobs!(Parser.parse_params(params))
   end
 
   def self.check_cyclic_dependancy(job_params)
@@ -24,6 +27,9 @@ class Parser
       look_up = Set.new
       while(job = job_params[job.left_node])
         break if !job.left_node
+        if look_up.add?(job.right_node).nil?
+          return true
+        end
       end
     end
     return false
@@ -38,13 +44,24 @@ class Parser
       end
       if obj.left_node
         elements.delete(obj.left_node)
-        job_pos = elements.index(obj.right_node)
-        elements.insert(job_pos, obj.left_node)
+        pos = elements.index(obj.right_node)
+        elements.insert(pos, obj.left_node)
       end
       elements
     }
   end
 end
+
+Parser.new.parse_input("a =>")
+
+Parser.new.parse_input("a =>
+                         b => ")
+Parser.new.parse_input("a =>
+                         b => c")
+
+ Parser.new.parse_input("a =>
+b => c
+c =>")
 
 Parser.new.parse_input("a =>
                          b => c
@@ -52,4 +69,10 @@ Parser.new.parse_input("a =>
                          d => a
                          e => b
                          f => ")
+#  Parser.new.parse_input("a =>
+# b => c
+# c => f
+# d => a
+# e =>
+# f => b") will raise an error
 # Parser.new.parse_input("a => a")
