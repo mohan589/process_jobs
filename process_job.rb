@@ -5,7 +5,7 @@ class ProcessJob
   attr_accessor :right_node, :left_node
 
   def initialize(right_job, left_job = nil)
-    raise DenpendencyError.new(msg: "Job doesn't depend on the same") if right_job == left_job
+    raise DenpendencyError.new("Job doesn't depend on the same") if right_job == left_job
     @right_node = right_job
     @left_node = (left_job == "") ? nil : left_job
   end

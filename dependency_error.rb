@@ -1,5 +1,5 @@
 class DenpendencyError < StandardError
-  def initialize(msg:)
+  def initialize(msg)
     super(msg)
   end
 end
